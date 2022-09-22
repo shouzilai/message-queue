@@ -1,9 +1,10 @@
 #include "msg_queue.h"
 
+
 int msg_init(int *msg_id)
 {
     int ret = 0;
-    key_t key = ftok("./", 121);
+    key_t key = ftok("./", 100);
     if (-1 == key) {
         printf("[ERROR] msg queue ftok\n");
     }
@@ -43,11 +44,11 @@ int msg_recive(int msg_id, msg_queue_p recv_msg)
         perror("msg queue recive msgrcv");
         return -1;
     }
-
+    printf("recive type is %d\n", recv_msg->type);
     return ret;
 }
 
-int msg_send(int msg_id, int cmd, msg_type type, uint8_t *data, int data_len)
+int msg_send(int msg_id, MSG_TYPE type, uint8_t *data, int data_len)
 {
     int ret = 0;
     msg_queue_t send_msg;
@@ -59,7 +60,7 @@ int msg_send(int msg_id, int cmd, msg_type type, uint8_t *data, int data_len)
     for (int i = 0; i < data_len; i++) {
         send_msg.data[i] = data[i];
     }
-    send_msg.cmd = cmd;
+
     send_msg.type = type;
 
     ret = msgsnd(msg_id, &send_msg, data_len, 0);

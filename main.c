@@ -33,7 +33,7 @@ static void *message_recv_thread(void *argc)
         ret = msg_recive(msg_id, &msg);
 
         printf("msg ret is %d\n", ret);
-        printf("message has recived. the type of message is %d %d, data is \n", msg.type, msg.cmd);
+        printf("message has recived. the type of message is %d , data is \n", msg.type);
         print_data(&msg);
 
         sleep(2);
@@ -84,7 +84,7 @@ static int chose_message(msg_type type, msg_queue_p msg_p)
         defalut:
             break;
     }
-    print_data(msg_p);
+    // print_data(msg_p);
 
     return 0;
 }
@@ -106,13 +106,12 @@ int main()
     {
         memset(message_t.data, 0x0, sizeof(message_t.data));
 
-        cmd = rand() % 10 + 1; // 生成 1~10
         type = rand() % 3 + 1; // 生成 1~3 类型的消息队列类型
         chose_message(type, &message_t);
 
         printf("type random is %d\n", type);
-        print_data(&message_t);
-        msg_send(msg_id, type, cmd, message_t.data, sizeof(message_t.data));
+        // print_data(&message_t);
+        msg_send(msg_id, type, message_t.data, strlen(message_t.data));
         printf("msg send success\n\n");
         sleep(2);
     }
